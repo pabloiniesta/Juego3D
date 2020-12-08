@@ -6,6 +6,7 @@
 #include "ShaderProgram.h"
 #include "Level.h"
 #include "AssimpModel.h"
+#include "Player.h"
 
 
 #define CAMERA_WIDTH 640
@@ -33,6 +34,7 @@ private:
 private:
 	Level *level;
 	AssimpModel *model;
+	Player *player;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
