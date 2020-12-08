@@ -11,13 +11,15 @@ public:
 	void init(ShaderProgram& shaderProgram);
 	void update(int deltaTime);
 	void render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram);
-	void setPosition(const glm::fvec3 &pos);
+	void setPosition(const glm::vec3 &pos);
 
 	glm::vec3 posPlayer;
 	glm::vec3 sizePlayer;
-
+	glm::vec2 velPlayer;
+	
 	AssimpModel* modelPlayer;
-
+private:
+   
 };
 
 #endif

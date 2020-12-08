@@ -53,8 +53,11 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 
-	//direccion camara(ver cosas del derecho o del reves, de frente o por la espalda....)
-	viewMatrix = glm::lookAt(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
+	//primer vec pos camara -> x: mirar der o izq, y: mirar arriba o abajo, z: alejar o acercar camara
+	//segundo vec punto a donde mirar -> x e y = 0 (mirar al centro) y miramos a las z negativ porque ahi esta el player
+	//tercer vec orientacion de la camara -> y pos todo del derecho y negativ todo boca abajo
+	//para mover cam hay cambiar las x/y del primero y las x/y del segundo vec con los mismos valores
+	viewMatrix = glm::lookAt(glm::vec3(0.f, 0.f, 10.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
 
 	// Render level
 	modelMatrix = glm::mat4(1.0f);
