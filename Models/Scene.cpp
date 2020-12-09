@@ -31,6 +31,8 @@ void Scene::init()
 	player = new Player();
 	player->init(texProgram);
 
+	//cargar mapa
+	mapa = Map::createMap("levels/level01.txt", glm::vec2(32, 16), texProgram);
 	//camara
 	projection = glm::perspective(45.f / 180.f * PI, float(CAMERA_WIDTH) / float(CAMERA_HEIGHT), 0.1f, 100.f);
 	currentTime = 0.0f;
@@ -66,7 +68,8 @@ void Scene::render()
 	texProgram.setUniformMatrix3f("normalmatrix", normalMatrix);
 	//level->render();
 
-	
+	//render map
+	mapa->render(currentTime, viewMatrix, texProgram);
 	//Render player
 	player->render(currentTime, viewMatrix, texProgram);
 }

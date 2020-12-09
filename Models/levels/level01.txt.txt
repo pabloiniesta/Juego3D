@@ -1,0 +1,13 @@
+TILEMAP
+10 10							-- Size of tile map in tiles Mapsize.x Mapsize.y
+16 							-- Tile size. Tamaño modelo es 16x16x16
+1111111111
+1        1
+1        1
+1        1
+1        1
+1        1
+1        1
+1        1
+1        1
+1111111111

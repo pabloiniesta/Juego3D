@@ -6,7 +6,7 @@
 
 const float X_INICIAL = 0.f;
 const float Y_INICIAL = 0.f;
-const float Z_INICIAL = -5.f;
+const float Z_INICIAL = 0.f;
 
 const glm::vec2 INITIAL_VELOCITY(0.1f, 0.1f);
 

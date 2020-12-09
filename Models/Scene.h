@@ -7,6 +7,7 @@
 #include "Level.h"
 #include "AssimpModel.h"
 #include "Player.h"
+#include "Map.h"
 
 
 #define CAMERA_WIDTH 640
@@ -34,6 +35,7 @@ private:
 private:
 	Level *level;
 	AssimpModel *model;
+	Map *mapa;
 	Player *player;
 	ShaderProgram texProgram;
 	float currentTime;
