@@ -19,6 +19,7 @@ void Player::init(ShaderProgram& shaderProgram)
 	velPlayer = INITIAL_VELOCITY;
 	//posicion inicial (hardcodeao por ahora)
 	posPlayer = glm::vec2(X_INICIAL, Y_INICIAL);
+	sizePlayer = glm::vec2(1, 1);
 }
 
 void Player::update(int deltaTime)

@@ -45,10 +45,14 @@
     <ClCompile Include="Map.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="GameObject.cpp">
+=======
     <ClCompile Include="Menu.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="TexturedQuad.cpp">
+>>>>>>> 8c344dca5af285ea796266c74d48099d2109482e
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,10 +87,14 @@
     <ClInclude Include="Map.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="GameObject.h">
+=======
     <ClInclude Include="Menu.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="TexturedQuad.h">
+>>>>>>> 8c344dca5af285ea796266c74d48099d2109482e
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

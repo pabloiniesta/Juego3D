@@ -17,7 +17,7 @@ public:
 	void setMap(Map* mapa);
 
 	glm::vec2 posPlayer;
-	glm::vec3 sizePlayer;
+	glm::vec2 sizePlayer;
 	glm::vec2 velPlayer;
 	
 	AssimpModel* modelPlayer;

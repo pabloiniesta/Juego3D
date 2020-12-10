@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="AssimpModel.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -27,6 +28,7 @@
   <ItemGroup>
     <ClInclude Include="AssimpModel.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />

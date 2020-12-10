@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Game.h"
 #include <GL/glut.h>
+#include <vector>
 
 //testeando github
 #define PI 3.14159f
@@ -27,6 +28,8 @@ void Scene::init(int lvl)
 		delete mapa;
 	if (player != NULL)
 		delete player;
+	if (!objects.empty())
+		objects.clear();
 	//AQUI SE BORRA TODO
 	initShaders();
 	//cargar mapa
@@ -40,12 +43,15 @@ void Scene::init(int lvl)
 	}
 	else if (lvl == 3) {
 		//mapa 3
+		mapa = Map::createMap("levels/level03.txt", glm::vec2(32, 16), texProgram);
 	}
 	else if (lvl == 4) {
 		//mapa 4
+		mapa = Map::createMap("levels/level04.txt", glm::vec2(32, 16), texProgram);
 	}
 	else if (lvl == 5) {
 		//mapa 5
+		mapa = Map::createMap("levels/level05.txt", glm::vec2(32, 16), texProgram);
 	}
 
 	//cargar nivel
@@ -56,7 +62,17 @@ void Scene::init(int lvl)
 	player->init(texProgram);
 	player->setMap(mapa);
 
-	
+	//cargar game objects
+	for (int i = 0; i < mapa->objectInfo.size(); i++) {
+		pair<char, pair<int, int> > info = mapa->objectInfo[i];
+		char tipoObject = info.first;
+		int posObjectx = info.second.first;
+		int posObjecty = info.second.second;
+		GameObject *object = new GameObject();
+		object->init(texProgram, tipoObject, posObjectx, posObjecty);
+		objects.push_back(*object);
+	}
+
 	//camara
 	projection = glm::perspective(45.f / 180.f * PI, float(CAMERA_WIDTH) / float(CAMERA_HEIGHT), 0.1f, 100.f);
 	currentTime = 0.0f;
@@ -65,8 +81,22 @@ void Scene::init(int lvl)
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-
 	player->update(deltaTime);
+
+	//mirar colision objetos y player
+	bool choque = false;
+	for (int i = 0; i < objects.size();i++) {
+		if (objects[i].hp > 0) {
+			bool colision = CheckCollisionPlayerObject(*player, objects[i]);
+			if (colision) {
+				if (objects[i].tipoObject == 's') { //si es la estrella
+					objects[i].colision();
+					Game::instance().nextLevel(0);
+				}
+			}
+		}
+	}
+
 
 }
 
@@ -86,15 +116,22 @@ void Scene::render()
 	viewMatrix = glm::lookAt(glm::vec3(10.f, 9.f, 30.f), glm::vec3(10.f, 9.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
 
 	// Render level
-	modelMatrix = glm::mat4(1.0f);
+	/*modelMatrix = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", viewMatrix * modelMatrix);
 	normalMatrix = glm::transpose(glm::inverse(glm::mat3(viewMatrix * modelMatrix)));
 	texProgram.setUniformMatrix3f("normalmatrix", normalMatrix);
-	//level->render();
+	level->render();*/
+
 	//Render player
 	player->render(currentTime, viewMatrix, texProgram);
 	//render map
 	mapa->render(currentTime, viewMatrix, texProgram);
+
+	for (int i = 0; i < objects.size();i++) {
+		if (objects[i].hp > 0) {
+			objects[i].render(currentTime, viewMatrix, texProgram);
+		}
+	}
 	
 }
 
@@ -126,6 +163,19 @@ void Scene::initShaders()
 	texProgram.bindFragmentOutput("outColor");
 	vShader.free();
 	fShader.free();
+}
+
+bool Scene::CheckCollisionPlayerObject(Player& one, GameObject& two)
+{
+	
+	bool collisionX = one.posPlayer.x + one.sizePlayer.x >= two.posObject.x &&
+		two.posObject.x + two.sizeObject.x >= one.posPlayer.x;
+	// Collision y-axis?
+	bool collisionY = one.posPlayer.y + one.sizePlayer.y >= two.posObject.y &&
+		two.posObject.y + two.sizeObject.y >= one.posPlayer.y;
+	// Collision only if on both axes
+	return collisionX && collisionY;
+
 }
 
 

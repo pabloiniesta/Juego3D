@@ -6,7 +6,7 @@
 #include "Texture.h"
 #include "ShaderProgram.h"
 #include "AssimpModel.h"
-
+#include <vector>
 
 class Map
 {
@@ -28,6 +28,7 @@ public:
 	bool collisionMoveUp(const glm::ivec2& pos) const;
 	bool collisionMoveDown(const glm::ivec2& pos) const;
 
+	vector< pair<char, pair<int, int> > > objectInfo; //vector con los datos de un object. Char dice el tipo y luego va la pos
 
 	
 

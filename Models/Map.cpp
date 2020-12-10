@@ -89,19 +89,22 @@ bool Map::loadLevel(const string& levelFile)
 	{
 		for (int i = 0; i < mapSize.x; i++)
 		{
-			OutputDebugStringW(L" ");
+			/*OutputDebugStringW(L" ");
 			char s[256];
 			sprintf(s, "%d",i);
 			OutputDebugStringA((LPCSTR)s);
 			sprintf(s, "%d", j);
 			OutputDebugStringA((LPCSTR)s);
-			OutputDebugStringW(L" ");
+			OutputDebugStringW(L" ");*/
 			fin.get(tile);
-			if (tile == ' ')
+			if (tile == ' ') //vacio
 				map[j * mapSize.x + i] = 0;
+			else if (tile == 's') { //s de star. Pa ganar el nivel
+				objectInfo.push_back(make_pair('s', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
 			else {
 				map[j * mapSize.x + i] = tile - int('0');
-				OutputDebugStringW(L"x");
 			}
 		}
 		fin.get(tile);

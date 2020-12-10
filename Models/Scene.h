@@ -8,6 +8,8 @@
 #include "AssimpModel.h"
 #include "Player.h"
 #include "Map.h"
+#include "GameObject.h"
+
 
 
 #define CAMERA_WIDTH 640
@@ -37,6 +39,10 @@ private:
 	AssimpModel *model;
 	Map *mapa;
 	Player *player;
+	vector<GameObject> objects;
+
+	bool CheckCollisionPlayerObject(Player& one, GameObject& two);
+
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
