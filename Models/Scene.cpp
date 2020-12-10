@@ -70,11 +70,11 @@ void Scene::render()
 	normalMatrix = glm::transpose(glm::inverse(glm::mat3(viewMatrix * modelMatrix)));
 	texProgram.setUniformMatrix3f("normalmatrix", normalMatrix);
 	//level->render();
-
-	//render map
-	mapa->render(currentTime, viewMatrix, texProgram);
 	//Render player
 	player->render(currentTime, viewMatrix, texProgram);
+	//render map
+	mapa->render(currentTime, viewMatrix, texProgram);
+	
 }
 
 void Scene::initShaders()

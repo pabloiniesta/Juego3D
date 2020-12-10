@@ -146,20 +146,35 @@ bool Map::collisionMoveLeft(const glm::ivec2& pos) const
 	x = pos.x;
 	y = pos.y;
 	y2 = pos.y + 1;
-	if (map[pos.y * mapSize.x + pos.x] != 0 ){//|| (map[pos.y + 1 * mapSize.x + pos.x] != 0 && map[pos.y + 1 * mapSize.x + pos.x] == 0)) {
+	if (map[pos.y * mapSize.x + pos.x] != 0 ){ //bloque izquierda es pared
 		return true;
+	}
+	else {
+		if (map[((pos.y + 1) * mapSize.x + pos.x + 1)] == 0) { //bloque de encima izq es pared
+			if (map[((pos.y + 1) * mapSize.x + pos.x)] != 0) {
+				return true;
+			}
+		}
 	}
 	return false;
 }
 
 bool Map::collisionMoveRight(const glm::ivec2& pos) const
-{
+{	
 	int x, y, y2;
 	x = pos.x+1;
 	y = pos.y;
 	y2 = pos.y + 1;
-	if (map[pos.y * mapSize.x + pos.x + 1] != 0 ){ //|| (map[pos.y + 1 * mapSize.x + pos.x + 1] != 0 && map[pos.y + 1 * mapSize.x + pos.x] == 0)) {
+	if (map[pos.y * mapSize.x + pos.x+1] != 0 ){ //bloque derecha es pared
 		return true;
+	}
+	
+	else {
+		if (map[((pos.y + 1) * mapSize.x + pos.x)] == 0) {
+			if (map[((pos.y + 1) * mapSize.x + pos.x + 1)] != 0) { //bloque de encima derecha es pared
+				return true;
+			}
+		}
 	}
 	return false;
 }
@@ -170,8 +185,15 @@ bool Map::collisionMoveUp(const glm::ivec2& pos) const
 	x = pos.x;
 	x2 = pos.x + 1;
 	y = pos.y+1;
-	if (map[y * mapSize.x + x] != 0){ //|| (map[y* mapSize.x + x2] != 0 && map[y * mapSize.x + x] == 0)) {
+	if (map[(pos.y + 1) * mapSize.x + pos.x] != 0){ //si hay bloque encima 
 		return true;
+	}
+	else {
+		if (map[((pos.y) * mapSize.x + pos.x + 1)] == 0) { //si el bloque de la derecha esta vacio
+			if (map[((pos.y + 1) * mapSize.x + pos.x + 1)] != 0) {
+				return true;
+			}
+		}
 	}
 	return false;
 }
@@ -181,8 +203,15 @@ bool Map::collisionMoveDown(const glm::ivec2& pos) const
 	int x, y;
 	x = pos.x;
 	y = pos.y;
-	if (map[y * mapSize.x + x] != 0) {
+	if (map[pos.y * mapSize.x + pos.x] != 0) { //si hay bloque debajo nuestro
 		return true;
+	}
+	else {
+		if ((map[pos.y * mapSize.x + pos.x] == 0) && (map[pos.y * mapSize.x + pos.x] == 0)) { //si el bloque de la derecha esta vacio
+			if (map[pos.y * mapSize.x + pos.x + 1] != 0) { //miramos si el bloque de abajo derecha nuestro existe
+				return true;
+			}
+		}
 	}
 	return false;
 }

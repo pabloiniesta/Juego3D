@@ -23,6 +23,7 @@ void Player::init(ShaderProgram& shaderProgram)
 
 void Player::update(int deltaTime)
 {
+	
 	if (Game::instance().getKey(32)) { //space
 		if (Game::instance().getKey(32)) {
 			Game::instance().keyReleased(32);
@@ -32,21 +33,28 @@ void Player::update(int deltaTime)
 		}
 		velPlayer.y *= -1.f;
 	}
+
+	posPlayer.x += velPlayer.x;
 	if (map->collisionMoveRight(posPlayer)) {
-		velPlayer.x *= -1.f;
+		posPlayer.x -= velPlayer.x;
+		velPlayer.x = -velPlayer.x;
+	}
+	if (map->collisionMoveLeft(posPlayer)) {
+		posPlayer.x -= velPlayer.x;
+		velPlayer.x = -velPlayer.x;
 	}
 
-	if (map->collisionMoveLeft(posPlayer)) {
-		velPlayer.x *= -1.f;
-	}
+	posPlayer.y += velPlayer.y;
 	if (map->collisionMoveUp(posPlayer)) {
-		velPlayer.y *= -1.f;
+		posPlayer.y -= velPlayer.y;
+		velPlayer.y = -velPlayer.y;
 	}
 	if (map->collisionMoveDown(posPlayer)) {
-		velPlayer.y *= -1.f;
+		posPlayer.y -= velPlayer.y;
+		velPlayer.y = -velPlayer.y;
 	}
-	posPlayer.x += velPlayer.x;
-	posPlayer.y += velPlayer.y;
+	
+	
 }
 
 void Player::render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram) //current time es para mover/rotar ciclicamente
