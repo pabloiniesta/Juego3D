@@ -25,7 +25,7 @@ public:
 	Scene();
 	~Scene();
 
-	void init();
+	void init(int lvl);
 	void update(int deltaTime);
 	void render();
 

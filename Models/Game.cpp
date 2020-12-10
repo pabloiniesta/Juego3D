@@ -1,27 +1,86 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+//#include <irrKlang.h>
 
+using namespace std;
+//using namespace irrklang;
+
+
+//ISoundEngine* SoundEngine = createIrrKlangDevice();
+
+/*
+void Game::playSound(const char* path, bool loop) {
+	SoundEngine->play2D(path, loop);
+}
+
+void Game::stopSounds() {
+	SoundEngine->stopAllSounds();
+}
+*/
 
 void Game::init()
 {
 	bPlay = true;
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
-	scene.init();
+	setMenuState();
+	MainMenu.init();
 }
 
-bool Game::update(int deltaTime)
-{
-	scene.update(deltaTime);
-	
+
+bool Game::update(int deltaTime) {
+	if (levelAct == 0) {  //Main menu
+		MainMenu.update(deltaTime);
+	}
+	else {
+		scene.update(deltaTime);
+	}
+	if (getKey(52)) { //4 -> saltar pantalla
+		if (Game::instance().getKey(52)) {
+			Game::instance().keyReleased(52);
+		}
+		if (Game::instance().getKey(52)) {
+			Game::instance().keyReleased(52);
+		}
+		nextLevel(0);
+	}
 	return bPlay;
+}
+
+void Game::setMenuState() {
+	levelAct = 0;
 }
 
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render();
+	if (levelAct == 0) {  //Main menu
+		MainMenu.render();
+	}
+	else {
+		scene.render();
+	}
+}
+
+void Game::nextLevel(int lvl) {
+	if (lvl == 0) {
+		++levelAct; //Go to next level
+		if (levelAct == 1) {//Num of total levels+1
+			//SoundEngine->stopAllSounds();
+			//SoundEngine->play2D("sounds/background.mp3", true);
+			OutputDebugStringW(L"LEVEL1");
+			scene.init(1);
+		}
+		else if (levelAct == 2) {
+			OutputDebugStringW(L"LEVEL2");
+			scene.init(2);
+		}
+		else if (levelAct == 3) {
+			OutputDebugStringW(L"LEVEL3");
+			scene.init(3);
+		}
+	}
 }
 
 void Game::keyPressed(int key)

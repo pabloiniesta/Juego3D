@@ -21,11 +21,32 @@ Scene::~Scene()
 }
 
 
-void Scene::init()
+void Scene::init(int lvl)
 {
+	if (mapa != NULL)
+		delete mapa;
+	if (player != NULL)
+		delete player;
+	//AQUI SE BORRA TODO
 	initShaders();
 	//cargar mapa
-	mapa = Map::createMap("levels/level01.txt", glm::vec2(32, 16), texProgram);
+	if(lvl == 1){
+		OutputDebugStringW(L"LVL1");
+		mapa = Map::createMap("levels/level01.txt", glm::vec2(32, 16), texProgram);
+	}
+	else if (lvl == 2) {
+		OutputDebugStringW(L"LVL1");
+		mapa = Map::createMap("levels/level02.txt", glm::vec2(32, 16), texProgram);
+	}
+	else if (lvl == 3) {
+		//mapa 3
+	}
+	else if (lvl == 4) {
+		//mapa 4
+	}
+	else if (lvl == 5) {
+		//mapa 5
+	}
 
 	//cargar nivel
 	level = Level::createLevel(glm::vec3(16, 4, 32), texProgram, "images/floor.png", "images/wall.png");

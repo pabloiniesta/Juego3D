@@ -3,6 +3,7 @@
 
 
 #include "Scene.h"
+#include "Menu.h"
 
 
 // Game is a singleton (a class with a single instance) that represents our whole application
@@ -25,6 +26,9 @@ public:
 	void init();
 	bool update(int deltaTime);
 	void render();
+	void setMenuState();
+	void nextLevel(int lvl);
+	void winScreen(int score, int money);
 	
 	// Input callback methods
 	void keyPressed(int key);
@@ -43,7 +47,9 @@ private:
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
-
+	int state;						  // 1 = menu, 2 = instructions, 3 = credits, 4 = play
+	Menu MainMenu;
+	int levelAct;
 };
 
 
