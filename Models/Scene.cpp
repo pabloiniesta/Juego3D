@@ -24,15 +24,18 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
+	//cargar mapa
+	mapa = Map::createMap("levels/level01.txt", glm::vec2(32, 16), texProgram);
+
 	//cargar nivel
 	level = Level::createLevel(glm::vec3(16, 4, 32), texProgram, "images/floor.png", "images/wall.png");
 
 	//cargar player
 	player = new Player();
 	player->init(texProgram);
+	player->setMap(mapa);
 
-	//cargar mapa
-	mapa = Map::createMap("levels/level01.txt", glm::vec2(32, 16), texProgram);
+	
 	//camara
 	projection = glm::perspective(45.f / 180.f * PI, float(CAMERA_WIDTH) / float(CAMERA_HEIGHT), 0.1f, 100.f);
 	currentTime = 0.0f;
@@ -59,7 +62,7 @@ void Scene::render()
 	//segundo vec punto a donde mirar -> x e y = 0 (mirar al centro) y miramos a las z negativ porque ahi esta el player
 	//tercer vec orientacion de la camara -> y pos todo del derecho y negativ todo boca abajo
 	//para mover cam hay cambiar las x/y del primero y las x/y del segundo vec con los mismos valores
-	viewMatrix = glm::lookAt(glm::vec3(0.f, 0.f, 25.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
+	viewMatrix = glm::lookAt(glm::vec3(10.f, 9.f, 30.f), glm::vec3(10.f, 9.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
 
 	// Render level
 	modelMatrix = glm::mat4(1.0f);

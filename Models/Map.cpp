@@ -3,6 +3,9 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <string>
+#include <GL/glew.h>
+#include <GL/glut.h>
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_FORCE_RADIANS
 using namespace std;
@@ -10,12 +13,11 @@ using namespace std;
 Map* Map::createMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program)
 {
 	Map* map = new Map(levelFile, minCoords, program);
-
 	return map;
 }
 
-Map::Map(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program)
-{
+Map::Map(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& program)
+{	
 	loadLevel(levelFile);
 	prepareArrays(minCoords, program);
 }
@@ -26,17 +28,16 @@ Map::~Map()
 		delete map;
 }
 
-void Map::render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram)
+void Map::render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram) const
 {
 	glm::mat4 modelMatrix;
 	glm::mat3 normalMatrix;
 	AssimpModel* modelCubo = new AssimpModel();
-	modelCubo->loadFromFile("models/cubocara.obj", shaderProgram);
+	modelCubo->loadFromFile("models/cuboparedBordes.obj", shaderProgram);
+	float scaleFactor = 1.f / modelCubo->getHeight();
+	glm::vec3 centerModelBase = modelCubo->getCenter() - glm::vec3(0.f, -modelCubo->getHeight() / 2.f, 0.f);
 	for (int i = 0; i < posCubos.size();++i) {
 		
-		float scaleFactor = 1.f / modelCubo->getHeight();
-		glm::vec3 centerModelBase = modelCubo->getCenter() - glm::vec3(0.f, -modelCubo->getHeight() / 2.f, 0.f);
-
 		modelMatrix = glm::mat4(1.0f);
 		modelMatrix = glm::translate(modelMatrix, glm::vec3(posCubos[i].x, posCubos[i].y, 0)); //esta establece la pos del objeto
 
@@ -57,36 +58,51 @@ void Map::free()
 	glDeleteBuffers(1, &vbo);
 }
 
+
 bool Map::loadLevel(const string& levelFile)
 {
+	
+	OutputDebugStringW(L"EMPIEZA LECTURA");
 	ifstream fin;
 	string line, tilesheetFile;
 	stringstream sstream;
 	char tile;
-
 	fin.open(levelFile.c_str());
-	if (!fin.is_open())
+	if (!fin.is_open()) {
+		OutputDebugStringW(L"ESTOY EN IS OPEN");
 		return false;
+	}
 	getline(fin, line);
-	if (line.compare(0, 7, "TILEMAP") != 0)
+	if (line.compare(0, 7, "TILEMAP") != 0) {
+		OutputDebugStringW(L"ESTOY EN COMPARE");
 		return false;
+	}
+
 	getline(fin, line);
 	sstream.str(line);
 	sstream >> mapSize.x >> mapSize.y;
 	getline(fin, line);
 	sstream.str(line);
 	sstream >> tileSize;
-	
 	map = new int[mapSize.x * mapSize.y];
-	for (int j = 0; j < mapSize.y; j++)
+	for (int j = mapSize.y-1; j >= 0; j--)
 	{
 		for (int i = 0; i < mapSize.x; i++)
 		{
+			OutputDebugStringW(L" ");
+			char s[256];
+			sprintf(s, "%d",i);
+			OutputDebugStringA((LPCSTR)s);
+			sprintf(s, "%d", j);
+			OutputDebugStringA((LPCSTR)s);
+			OutputDebugStringW(L" ");
 			fin.get(tile);
 			if (tile == ' ')
 				map[j * mapSize.x + i] = 0;
-			else
+			else {
 				map[j * mapSize.x + i] = tile - int('0');
+				OutputDebugStringW(L"x");
+			}
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -102,21 +118,71 @@ bool Map::loadLevel(const string& levelFile)
 void Map::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 {
 	int tile, nTiles = 0;
-	glm::vec2 posTile;
 	
 	for (int j = 0; j < mapSize.y; j++)
 	{
 		for (int i = 0; i < mapSize.x; i++)
 		{
 			tile = map[j * mapSize.x + i];
+			
 			if (tile != 0)
 			{
 				// Non-empty tile
 				nTiles++;
-				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
+				glm::vec2 posTile;
+				posTile = glm::vec2(i, j);
+				
+
 				posCubos.push_back(posTile);
 				
 			}
 		}
 	}
+}
+
+bool Map::collisionMoveLeft(const glm::ivec2& pos) const
+{
+	int x, y, y2;
+	x = pos.x;
+	y = pos.y;
+	y2 = pos.y + 1;
+	if (map[pos.y * mapSize.x + pos.x] != 0 ){//|| (map[pos.y + 1 * mapSize.x + pos.x] != 0 && map[pos.y + 1 * mapSize.x + pos.x] == 0)) {
+		return true;
+	}
+	return false;
+}
+
+bool Map::collisionMoveRight(const glm::ivec2& pos) const
+{
+	int x, y, y2;
+	x = pos.x+1;
+	y = pos.y;
+	y2 = pos.y + 1;
+	if (map[pos.y * mapSize.x + pos.x + 1] != 0 ){ //|| (map[pos.y + 1 * mapSize.x + pos.x + 1] != 0 && map[pos.y + 1 * mapSize.x + pos.x] == 0)) {
+		return true;
+	}
+	return false;
+}
+
+bool Map::collisionMoveUp(const glm::ivec2& pos) const
+{
+	int x, x2, y;
+	x = pos.x;
+	x2 = pos.x + 1;
+	y = pos.y+1;
+	if (map[y * mapSize.x + x] != 0){ //|| (map[y* mapSize.x + x2] != 0 && map[y * mapSize.x + x] == 0)) {
+		return true;
+	}
+	return false;
+}
+
+bool Map::collisionMoveDown(const glm::ivec2& pos) const
+{
+	int x, y;
+	x = pos.x;
+	y = pos.y;
+	if (map[y * mapSize.x + x] != 0) {
+		return true;
+	}
+	return false;
 }

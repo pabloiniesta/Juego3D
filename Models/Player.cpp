@@ -4,9 +4,8 @@
 #include <GL/glut.h>
 #include "Game.h"
 
-const float X_INICIAL = 0.f;
-const float Y_INICIAL = 0.f;
-const float Z_INICIAL = 0.f;
+const float X_INICIAL = 2.f;
+const float Y_INICIAL = 2.f;
 
 const glm::vec2 INITIAL_VELOCITY(0.1f, 0.1f);
 
@@ -19,7 +18,7 @@ void Player::init(ShaderProgram& shaderProgram)
 	//vel player inicial x = 1, y = 1
 	velPlayer = INITIAL_VELOCITY;
 	//posicion inicial (hardcodeao por ahora)
-	posPlayer = glm::vec3(X_INICIAL, Y_INICIAL, Z_INICIAL);
+	posPlayer = glm::vec2(X_INICIAL, Y_INICIAL);
 }
 
 void Player::update(int deltaTime)
@@ -33,25 +32,19 @@ void Player::update(int deltaTime)
 		}
 		velPlayer.y *= -1.f;
 	}
-	if (Game::instance().getKey(52)) { //4
-		if (Game::instance().getKey(52)) {
-			Game::instance().keyReleased(52);
-		}
-		if (Game::instance().getKey(52)) {
-			Game::instance().keyReleased(52);
-		}
-		velPlayer.y *= -1.f;
-	}
-	if (Game::instance().getKey(53)) { //5
-		if (Game::instance().getKey(53)) {
-			Game::instance().keyReleased(53);
-		}
-		if (Game::instance().getKey(53)) {
-			Game::instance().keyReleased(52);
-		}
+	if (map->collisionMoveRight(posPlayer)) {
 		velPlayer.x *= -1.f;
 	}
-	
+
+	if (map->collisionMoveLeft(posPlayer)) {
+		velPlayer.x *= -1.f;
+	}
+	if (map->collisionMoveUp(posPlayer)) {
+		velPlayer.y *= -1.f;
+	}
+	if (map->collisionMoveDown(posPlayer)) {
+		velPlayer.y *= -1.f;
+	}
 	posPlayer.x += velPlayer.x;
 	posPlayer.y += velPlayer.y;
 }
@@ -66,7 +59,7 @@ void Player::render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& sha
 
 	modelMatrix = glm::mat4(1.0f);
 	//modelMatrix = glm::translate(modelMatrix, glm::vec3(0.f, 0.5f * fabs(sinf(3.f * currentTime / 1000.f)), 0.f));
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(posPlayer.x, posPlayer.y, posPlayer.z)); //esta establece la pos del objeto
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(posPlayer.x, posPlayer.y, 0)); //esta establece la pos del objeto
 	
 	//rotar modelo: cuanto quieres rotar y en que eje quieres hacerlo
 	//modelMatrix = glm::rotate(modelMatrix, 2.f, glm::vec3(0.f, 0.f, 1.f));
@@ -80,7 +73,12 @@ void Player::render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& sha
 	modelPlayer->render(shaderProgram);
 }
 
-void Player::setPosition(const glm::vec3& pos)
+void Player::setPosition(const glm::vec2& pos)
 {
 	posPlayer = pos;
+}
+
+void Player::setMap(Map* mapa)
+{
+	map = mapa;
 }

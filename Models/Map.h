@@ -18,18 +18,18 @@ public:
 	Map(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 	~Map();
 
-	void render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram);
+	void render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram) const;
 	void free();
 
 	int getTileSize() const { return tileSize; }
 
-	//bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const;
-	//bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) const;
-	//bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) const;
-	//bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool collisionMoveLeft(const glm::ivec2& pos) const;
+	bool collisionMoveRight(const glm::ivec2& pos) const;
+	bool collisionMoveUp(const glm::ivec2& pos) const;
+	bool collisionMoveDown(const glm::ivec2& pos) const;
 
 
-	glm::ivec2 mapSize;
+	
 
 private:
 	bool loadLevel(const string& levelFile);
@@ -40,12 +40,13 @@ private:
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
-	glm::ivec2 position, tilesheetSize;
+	glm::ivec2 position, tilesheetSize, mapSize;
 	int tileSize, blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	int* map;
 	vector<glm::vec2> posCubos; //vector con las posiciones de los cubos
+
 
 };
 
