@@ -29,6 +29,22 @@ void GameObject::init(ShaderProgram& shaderProgram, char tipo, int posx, int pos
 		tipoObject = 'm';
 		posObject = glm::vec2((float)posx, (float)posy);
 	}
+	if (tipo == 'c') { //Carcel, 1hp.
+		modelObject = new AssimpModel();
+		modelObject->loadFromFile("models/carcel.obj", shaderProgram);
+		hp = 1;
+		sizeObject = glm::vec2(1, 1);
+		tipoObject = 'c';
+		posObject = glm::vec2((float)posx, (float)posy);
+	}
+	if (tipo == 'k') { //llave, 1hp.
+		modelObject = new AssimpModel();
+		modelObject->loadFromFile("models/key.obj", shaderProgram);
+		hp = 1;
+		sizeObject = glm::vec2(1, 1);
+		tipoObject = 'k';
+		posObject = glm::vec2((float)posx, (float)posy);
+	}
 
 }
 
@@ -55,7 +71,7 @@ void GameObject::render(float currentTime, glm::mat4& viewMatrix, ShaderProgram&
 	}
 	else {
 		modelMatrix = glm::translate(modelMatrix, glm::vec3(posObject.x, posObject.y, 0)); //esta establece la pos del objeto
-		if (tipoObject == 's') {
+		if (tipoObject == 's' || tipoObject == 'k') {
 			//rotar modelo: cuanto quieres rotar y en que eje quieres hacerlo
 			modelMatrix = glm::rotate(modelMatrix, currentTime / 1000.f, glm::vec3(0.f, 1.f, 0.f));
 		}

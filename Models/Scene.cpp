@@ -62,10 +62,13 @@ void Scene::init(int lvl)
 	player->init(texProgram);
 	player->setMap(mapa);
 
+
+	keys = 0;
 	//cargar game objects
 	for (int i = 0; i < mapa->objectInfo.size(); i++) {
 		pair<char, pair<int, int> > info = mapa->objectInfo[i];
 		char tipoObject = info.first;
+		if (tipoObject == 'k') ++keys;
 		int posObjectx = info.second.first;
 		int posObjecty = info.second.second;
 		GameObject *object = new GameObject();
@@ -110,6 +113,14 @@ void Scene::update(int deltaTime)
 					if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
 					else player->velPlayer.y *= -1; //colision vertical
 				}
+				if (objects[i].tipoObject == 'c') { //es un pincho se muere el player. Reset pos y vel player y cam
+					if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
+					else player->velPlayer.y *= -1; //colision vertical
+				}
+				if (objects[i].tipoObject == 'k') { //es un pincho se muere el player. Reset pos y vel player y cam
+					objects[i].colision();
+					keys--;
+				}
 			}
 			else {
 				if (objects[i].tipoObject == 'm') { // si no hay colision movemos el muro
@@ -143,6 +154,14 @@ void Scene::update(int deltaTime)
 			stage = 2;
 		}
 	}
+
+	//abrir puerta si llaves obtenidas
+	if (keys == 0) {
+		for (int i = 0; i < objects.size();i++) {
+			if (objects[i].tipoObject == 'c') objects[i].colision(); //eliminamos puertas
+		}
+	}
+
 	//CHEATS
 	if (Game::instance().getKey(53)) { // 5 -> god mode
 		if (Game::instance().getKey(53)) {

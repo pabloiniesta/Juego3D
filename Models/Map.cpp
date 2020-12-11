@@ -111,6 +111,14 @@ bool Map::loadLevel(const string& levelFile)
 				objectInfo.push_back(make_pair('m', make_pair(i, j)));
 				map[j * mapSize.x + i] = 0;
 			}
+			else if (tile == 'c') { //c de carcel. puerta que se abre al pillar llaves
+				objectInfo.push_back(make_pair('c', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'k') { //k de key. llaves para abrir puertas
+				objectInfo.push_back(make_pair('k', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
 			else {
 				map[j * mapSize.x + i] = tile - int('0');
 			}

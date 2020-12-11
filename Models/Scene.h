@@ -50,6 +50,7 @@ private:
 	pair<bool, pair<Direction, glm::ivec2>> CheckCollisionPlayerMuro(Player& one, GameObject& two); //mirar colision bola con objeto
 	Direction VectorDirection(glm::vec2 target);
 
+	int keys;
 	int stage;
 	float camaraXpos;
 	bool god;
