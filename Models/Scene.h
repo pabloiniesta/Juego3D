@@ -18,7 +18,12 @@
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
-
+enum Direction {
+	UP,
+	RIGHT,
+	DOWN,
+	LEFT
+};
 
 class Scene
 {
@@ -42,9 +47,12 @@ private:
 	vector<GameObject> objects;
 
 	bool CheckCollisionPlayerObject(Player& one, GameObject& two);
+	pair<bool, pair<Direction, glm::ivec2>> CheckCollisionPlayerMuro(Player& one, GameObject& two); //mirar colision bola con objeto
+	Direction VectorDirection(glm::vec2 target);
 
 	int stage;
 	float camaraXpos;
+	bool god;
 
 	ShaderProgram texProgram;
 	float currentTime;

@@ -86,6 +86,12 @@ void Player::setPosition(const glm::vec2& pos)
 	posPlayer = pos;
 }
 
+void Player::reset()
+{
+	posPlayer = INITIAL_POS;
+	velPlayer = INITIAL_VELOCITY;
+}
+
 void Player::setMap(Map* mapa)
 {
 	map = mapa;

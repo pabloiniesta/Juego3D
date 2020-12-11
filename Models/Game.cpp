@@ -87,6 +87,7 @@ void Game::nextLevel(int lvl) {
 		}
 		else if (levelAct == 6) {
 			MainMenu.activateWin();
+			levelAct = 0;
 		}
 	}
 }

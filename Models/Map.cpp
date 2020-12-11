@@ -33,7 +33,7 @@ void Map::render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shader
 	glm::mat4 modelMatrix;
 	glm::mat3 normalMatrix;
 	AssimpModel* modelCubo = new AssimpModel();
-	modelCubo->loadFromFile("models/cuboparedBordes.obj", shaderProgram);
+	modelCubo->loadFromFile("models/cubopared.obj", shaderProgram);
 	float scaleFactor = 1.f / modelCubo->getHeight();
 	glm::vec3 centerModelBase = modelCubo->getCenter() - glm::vec3(0.f, -modelCubo->getHeight() / 2.f, 0.f);
 	for (int i = 0; i < posCubos.size();++i) {
@@ -101,6 +101,14 @@ bool Map::loadLevel(const string& levelFile)
 				map[j * mapSize.x + i] = 0;
 			else if (tile == 's') { //s de star. Pa ganar el nivel
 				objectInfo.push_back(make_pair('s', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'p') { //p de pincho, te mata
+				objectInfo.push_back(make_pair('p', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'm') { //m de muro. te bloquea
+				objectInfo.push_back(make_pair('m', make_pair(i, j)));
 				map[j * mapSize.x + i] = 0;
 			}
 			else {

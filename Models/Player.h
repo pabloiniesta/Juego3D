@@ -13,7 +13,7 @@ public:
 	void update(int deltaTime);
 	void render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram);
 	void setPosition(const glm::vec2 &pos);
-
+	void reset();
 	void setMap(Map* mapa);
 
 	glm::vec2 posPlayer;
