@@ -4,7 +4,8 @@
 #include <GL/glut.h>
 
 void GameObject::init(ShaderProgram& shaderProgram, char tipo, int posx, int posy)
-{
+{	
+	encendido = false; //solo para las luces de las keys
 	if (tipo == 's') { //Star, 1hp.
 		modelObject = new AssimpModel();
 		modelObject->loadFromFile("models/star2.obj", shaderProgram);
@@ -45,11 +46,25 @@ void GameObject::init(ShaderProgram& shaderProgram, char tipo, int posx, int pos
 		tipoObject = 'k';
 		posObject = glm::vec2((float)posx, (float)posy);
 	}
+	if (tipo == 'l') { //luz, 1hp.
+		modelObject = new AssimpModel();
+		modelObject->loadFromFile("models/luzapagada.obj", shaderProgram);
+		hp = 1;
+		sizeObject = glm::vec2(1, 1);
+		tipoObject = 'l';
+		posObject = glm::vec2((float)posx, (float)posy);
+	}
 
 }
 
 void GameObject::colision() {
 	--hp;
+}
+
+void GameObject::encender(ShaderProgram& shaderProgram)
+{
+	modelObject = new AssimpModel();
+	modelObject->loadFromFile("models/luzencendida.obj", shaderProgram);
 }
 
 

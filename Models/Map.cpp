@@ -119,6 +119,10 @@ bool Map::loadLevel(const string& levelFile)
 				objectInfo.push_back(make_pair('k', make_pair(i, j)));
 				map[j * mapSize.x + i] = 0;
 			}
+			else if (tile == 'l') { //l de luz. se enciende al pillar una llave
+				objectInfo.push_back(make_pair('l', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
 			else {
 				map[j * mapSize.x + i] = tile - int('0');
 			}

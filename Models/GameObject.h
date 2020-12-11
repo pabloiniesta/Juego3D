@@ -11,10 +11,12 @@ public:
 	void init(ShaderProgram& shaderProgram, char tipo, int x, int y);
 	void render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram);
 	void colision();
+	void encender(ShaderProgram& shaderProgram);
 	glm::vec2 posObject;
 	glm::vec2 sizeObject;
 	int hp;
 	char tipoObject;
+	bool encendido;
 
 	AssimpModel* modelObject;
 

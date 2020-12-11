@@ -92,7 +92,6 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime);
 
 
-	
 	//mirar colision objetos y player
 	bool choque = false;
 	for (int i = 0; i < objects.size();i++) {
@@ -120,6 +119,11 @@ void Scene::update(int deltaTime)
 				if (objects[i].tipoObject == 'k') { //es un pincho se muere el player. Reset pos y vel player y cam
 					objects[i].colision();
 					keys--;
+					encenderLuz();
+				}
+				if (objects[i].tipoObject == 'l') { //si chocas contra una luz no haces na
+					if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
+					else player->velPlayer.y *= -1; //colision vertical
 				}
 			}
 			else {
@@ -176,6 +180,19 @@ void Scene::update(int deltaTime)
 
 }
 
+//encender una luz cuando se pilla una key
+void Scene::encenderLuz() {
+	bool found = false;
+	for (int i = 0; i < objects.size() && !found;i++) {
+		if (objects[i].tipoObject == 'l' && !objects[i].encendido) {
+			objects[i].encender(texProgram);
+			objects[i].encendido = true;
+			found = true;
+		}
+	}
+}
+
+
 void Scene::render()
 {
 	glm::mat4 modelMatrix, viewMatrix;
@@ -211,6 +228,10 @@ void Scene::render()
 	}
 	
 }
+
+
+
+
 
 void Scene::initShaders()
 {
