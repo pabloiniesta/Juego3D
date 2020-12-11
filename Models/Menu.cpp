@@ -1,6 +1,12 @@
 #include "Menu.h"
 #include "Game.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
+#include <cmath>
+#define GLM_FORCE_RADIANS
+#define PI 3.14159f
+#include "Scene.h"
+#include <GL/glut.h>
 
 using namespace std;
 
@@ -14,35 +20,27 @@ void Menu::init() {
 	bEnterPressed = false;
 	bCredits = false;
 	bInstructions = false;
+	bGameOver = false;
 	bWin = false;
+	
 
 	//Shader
 	initShaders();
-	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
-
-	//Texture quads
-	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };
-	glm::vec2 geomGUI[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
-
-
-	mainTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	mainTexture.loadFromFile("images/main_menu.png", TEXTURE_PIXEL_FORMAT_RGBA);
-
-	instructionsQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	instruccionsTex.loadFromFile("images/instructions.png", TEXTURE_PIXEL_FORMAT_RGBA);
-
-	creditsQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	creditsTex.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGBA);
-
-	youWinQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	winTex.loadFromFile("images/youwin.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	//projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
+	projection = glm::perspective(45.f / 180.f * PI, float(CAMERA_WIDTH) / float(CAMERA_HEIGHT), 0.1f, 100.f);
+	levelMenu = Level::createLevel(glm::vec3(4, 4, 7), texProgram, "images/floor.png", "images/main_menu.png");
+	levelInst = Level::createLevel(glm::vec3(4, 4, 7), texProgram, "images/floor.png", "images/instructions.png");
+	levelCreds = Level::createLevel(glm::vec3(4, 4, 7), texProgram, "images/floor.png", "images/credits.png");
+	levelWin = Level::createLevel(glm::vec3(4, 4, 7), texProgram, "images/floor.png", "images/youwin.png");
 }
 
 void Menu::update(int deltaTime) {
 
+
 	if (Game::instance().getKey(13) && !bEnterPressed) { //enter key
 		//Game::instance().playSound("sounds/menu_sel.wav", false);
 		bEnterPressed = true;
+		OutputDebugStringW(L"LEVEL1");
 		if (bInstructions) //If at Instructions screen
 			bInstructions = false; //Exit instructions screen
 		else if (bCredits) //If at Credits screen
@@ -78,55 +76,39 @@ void Menu::update(int deltaTime) {
 }
 
 void Menu::render() {
+	
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f); //Color uniform transform
-	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	glm::mat4 modelview;
+	viewMatrix = glm::lookAt(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
+	modelMatrix = glm::mat4(1.0f);
+	texProgram.setUniformMatrix4f("modelview", viewMatrix * modelMatrix);
+	normalMatrix = glm::transpose(glm::inverse(glm::mat3(viewMatrix * modelMatrix)));
+	texProgram.setUniformMatrix3f("normalmatrix", normalMatrix);
+	
 
-	//BACKGROUND
-	texProgram.setUniformMatrix4f("modelview", modelview);
-
-	mainTextureQuad->render(mainTexture);
-
+	
 	if (bInstructions) {//At instructions screen
-		//Render instructions
-		instructionsQuad->render(instruccionsTex);
+		levelInst->render();
 	}
 	else if (bCredits) {
-		//render records
-		creditsQuad->render(creditsTex);
+		levelCreds->render();
 	}
 	else if (bWin) {
-		youWinQuad->render(winTex);
+		levelWin->render();
 	}
 	else { //Main menu screen
-		mainTextureQuad->render(mainTexture);
+		levelMenu->render();
 	}
+	
 }
 
-void Menu::activateWin(int score, int money) {
-		//Game::instance().stopSounds();
-		//Game::instance().playSound("sounds/win.wav", false);
-		bWin = true;
-		bEnterPressed = false;
-		//calcularTexScore(score);
-		//calcularTexMoney(money);
+void Menu::activateWin() {
+	//Game::instance().stopSounds();
+	//Game::instance().playSound("sounds/win.wav", false);
+	bWin = true;
+	bEnterPressed = false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void Menu::initShaders() {
 	Shader vShader, fShader;
@@ -134,10 +116,14 @@ void Menu::initShaders() {
 	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
 	if (!vShader.isCompiled())
 	{
+		cout << "Vertex Shader Error" << endl;
+		cout << "" << vShader.log() << endl << endl;
 	}
 	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
 	if (!fShader.isCompiled())
 	{
+		cout << "Fragment Shader Error" << endl;
+		cout << "" << fShader.log() << endl << endl;
 	}
 	texProgram.init();
 	texProgram.addShader(vShader);
@@ -145,6 +131,8 @@ void Menu::initShaders() {
 	texProgram.link();
 	if (!texProgram.isLinked())
 	{
+		cout << "Shader Linking Error" << endl;
+		cout << "" << texProgram.log() << endl << endl;
 	}
 	texProgram.bindFragmentOutput("outColor");
 	vShader.free();

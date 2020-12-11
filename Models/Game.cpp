@@ -28,9 +28,13 @@ void Game::init()
 	MainMenu.init();
 }
 
+void Game::setMenuState() {
+	levelAct = 0;
+}
+
 
 bool Game::update(int deltaTime) {
-	if (levelAct == 0) {  //Main menu
+	if (levelAct == 0 || levelAct == 6) {  //Main menu
 		MainMenu.update(deltaTime);
 	}
 	else {
@@ -48,14 +52,11 @@ bool Game::update(int deltaTime) {
 	return bPlay;
 }
 
-void Game::setMenuState() {
-	levelAct = 0;
-}
 
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if (levelAct == 0) {  //Main menu
+	if (levelAct == 0 || levelAct == 6) {  //Main menu
 		MainMenu.render();
 	}
 	else {
@@ -73,12 +74,19 @@ void Game::nextLevel(int lvl) {
 			scene.init(1);
 		}
 		else if (levelAct == 2) {
-			OutputDebugStringW(L"LEVEL2");
 			scene.init(2);
 		}
 		else if (levelAct == 3) {
-			OutputDebugStringW(L"LEVEL3");
 			scene.init(3);
+		}
+		else if (levelAct == 4) {
+			scene.init(4);
+		}
+		else if (levelAct == 5) {
+			scene.init(5);
+		}
+		else if (levelAct == 6) {
+			MainMenu.activateWin();
 		}
 	}
 }

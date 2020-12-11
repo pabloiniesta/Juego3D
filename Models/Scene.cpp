@@ -116,7 +116,8 @@ void Scene::render()
 	viewMatrix = glm::lookAt(glm::vec3(10.f, 9.f, 30.f), glm::vec3(10.f, 9.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
 
 	// Render level
-	/*modelMatrix = glm::mat4(1.0f);
+	/*
+	modelMatrix = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", viewMatrix * modelMatrix);
 	normalMatrix = glm::transpose(glm::inverse(glm::mat3(viewMatrix * modelMatrix)));
 	texProgram.setUniformMatrix3f("normalmatrix", normalMatrix);
