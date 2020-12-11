@@ -76,6 +76,10 @@ void Scene::init(int lvl)
 	//camara
 	projection = glm::perspective(45.f / 180.f * PI, float(CAMERA_WIDTH) / float(CAMERA_HEIGHT), 0.1f, 100.f);
 	currentTime = 0.0f;
+
+	stage = 1;
+	camaraXpos = 10; //camara inicial en x = 10
+
 }
 
 void Scene::update(int deltaTime)
@@ -97,6 +101,29 @@ void Scene::update(int deltaTime)
 		}
 	}
 
+	//control de camara dependiendo del stage y el player
+	if (stage == 1) {
+		if (player->posPlayer.x > 20 && player->velPlayer.x > 0) { //se va pa la derecha
+			camaraXpos = 30;
+			stage = 2;
+		}
+	}
+	else if (stage == 2) {
+		if (player->posPlayer.x > 40 && player->velPlayer.x > 0) { //se va pa la derecha
+			camaraXpos = 50;
+			stage = 3;
+		}
+		if (player->posPlayer.x < 20 && player->velPlayer.x < 0) { //se va pa la izquierda
+			camaraXpos = 10;
+			stage = 1;
+		}
+	}
+	else if (stage == 3) {
+		if (player->posPlayer.x < 40 && player->velPlayer.x < 0) { //se va pa la izquierda
+			camaraXpos = 30;
+			stage = 2;
+		}
+	}
 
 }
 
@@ -113,7 +140,7 @@ void Scene::render()
 	//segundo vec punto a donde mirar -> x e y = 0 (mirar al centro) y miramos a las z negativ porque ahi esta el player
 	//tercer vec orientacion de la camara -> y pos todo del derecho y negativ todo boca abajo
 	//para mover cam hay cambiar las x/y del primero y las x/y del segundo vec con los mismos valores
-	viewMatrix = glm::lookAt(glm::vec3(10.f, 9.f, 30.f), glm::vec3(10.f, 9.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
+	viewMatrix = glm::lookAt(glm::vec3(camaraXpos, 9.f, 30.f), glm::vec3(camaraXpos, 9.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
 
 	// Render level
 	/*

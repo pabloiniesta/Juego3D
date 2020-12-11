@@ -4,9 +4,8 @@
 #include <GL/glut.h>
 #include "Game.h"
 
-const float X_INICIAL = 2.f;
-const float Y_INICIAL = 2.f;
 
+const glm::vec2 INITIAL_POS(2.f, 2.f);
 const glm::vec2 INITIAL_VELOCITY(0.1f, 0.1f);
 
 void Player::init(ShaderProgram& shaderProgram)
@@ -18,7 +17,7 @@ void Player::init(ShaderProgram& shaderProgram)
 	//vel player inicial x = 1, y = 1
 	velPlayer = INITIAL_VELOCITY;
 	//posicion inicial (hardcodeao por ahora)
-	posPlayer = glm::vec2(X_INICIAL, Y_INICIAL);
+	posPlayer = INITIAL_POS;
 	sizePlayer = glm::vec2(1, 1);
 }
 
