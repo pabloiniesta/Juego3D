@@ -43,6 +43,9 @@ private:
 
 	bool CheckCollisionPlayerObject(Player& one, GameObject& two);
 
+	int stage;
+	float camaraXpos;
+
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
