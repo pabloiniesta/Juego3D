@@ -47,6 +47,7 @@ private:
 	vector<GameObject> objects;
 
 	void encenderLuz();
+	void cambiarpinchos();
 
 	bool CheckCollisionPlayerObject(Player& one, GameObject& two);
 	pair<bool, pair<Direction, glm::ivec2>> CheckCollisionPlayerMuro(Player& one, GameObject& two); //mirar colision bola con objeto

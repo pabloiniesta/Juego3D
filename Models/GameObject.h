@@ -12,11 +12,16 @@ public:
 	void render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram);
 	void colision();
 	void encender(ShaderProgram& shaderProgram);
+	void activarpincho(ShaderProgram& shaderProgram);
+	void desactivarpincho(ShaderProgram& shaderProgram);
+	void pulsarboton(ShaderProgram& shaderProgram);
 	glm::vec2 posObject;
 	glm::vec2 sizeObject;
 	int hp;
 	char tipoObject;
 	bool encendido;
+	bool activo;
+	float scaling;
 
 	AssimpModel* modelObject;
 

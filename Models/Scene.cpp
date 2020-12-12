@@ -106,24 +106,52 @@ void Scene::update(int deltaTime)
 					if (!god) {
 						camaraXpos = 10;
 						player->reset();
+						stage = 1;
 					}
 				}
-				if (objects[i].tipoObject == 'm') { //es un pincho se muere el player. Reset pos y vel player y cam
+				if (objects[i].tipoObject == 'm') { //muro
 					if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
 					else player->velPlayer.y *= -1; //colision vertical
 				}
-				if (objects[i].tipoObject == 'c') { //es un pincho se muere el player. Reset pos y vel player y cam
-					if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
-					else player->velPlayer.y *= -1; //colision vertical
+				if (objects[i].tipoObject == 'c') { //puerta
+					if (!choque) {
+						if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
+						else player->velPlayer.y *= -1; //colision vertical
+						choque = true;
+					}
 				}
-				if (objects[i].tipoObject == 'k') { //es un pincho se muere el player. Reset pos y vel player y cam
+				if (objects[i].tipoObject == 'k') { //keys
 					objects[i].colision();
 					keys--;
 					encenderLuz();
 				}
 				if (objects[i].tipoObject == 'l') { //si chocas contra una luz no haces na
-					if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
-					else player->velPlayer.y *= -1; //colision vertical
+					if (!choque) {
+						if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
+						else player->velPlayer.y *= -1; //colision vertical
+						choque = true;
+					}
+				}
+				if (objects[i].tipoObject == 'a') { //es un pincho se muere el player. Reset pos y vel player y cam
+					if (!god && objects[i].activo) {
+						camaraXpos = 10;
+						player->reset();
+						stage = 1;
+					}
+				}
+				if (objects[i].tipoObject == 'b') { //es un pincho se muere el player. Reset pos y vel player y cam
+					if (!god && objects[i].activo) {
+						camaraXpos = 10;
+						player->reset();
+						stage = 1;
+					}
+				}
+				if (objects[i].tipoObject == 'i') { //interruptor. activa/desactiva pinchos
+					if (!objects[i].activo) {
+						objects[i].activo = true;
+						objects[i].pulsarboton(texProgram); //cambiar model del boton a pulsado
+						cambiarpinchos();
+					}
 				}
 			}
 			else {
@@ -188,6 +216,20 @@ void Scene::encenderLuz() {
 			objects[i].encender(texProgram);
 			objects[i].encendido = true;
 			found = true;
+		}
+	}
+}
+
+void Scene::cambiarpinchos()
+{
+	for (int i = 0; i < objects.size(); i++) {
+		if (objects[i].tipoObject == 'a') {
+			objects[i].activo = false;
+			objects[i].desactivarpincho(texProgram);
+		}
+		if (objects[i].tipoObject == 'b') {
+			objects[i].activo = true;
+			objects[i].activarpincho(texProgram);
 		}
 	}
 }

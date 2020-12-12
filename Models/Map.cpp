@@ -123,6 +123,18 @@ bool Map::loadLevel(const string& levelFile)
 				objectInfo.push_back(make_pair('l', make_pair(i, j)));
 				map[j * mapSize.x + i] = 0;
 			}
+			else if (tile == 'a') { //Pincho tipo A. se activa/desactiva
+				objectInfo.push_back(make_pair('a', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'b') { //pincho tipo B. se activa/desactiva
+				objectInfo.push_back(make_pair('b', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'i') { //interruptor. activa o desactiva pinchos
+				objectInfo.push_back(make_pair('i', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
 			else {
 				map[j * mapSize.x + i] = tile - int('0');
 			}
