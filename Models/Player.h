@@ -16,6 +16,7 @@ public:
 	void reset();
 	void setMap(Map* mapa);
 
+	bool rail;
 	glm::vec2 posPlayer;
 	glm::vec2 sizePlayer;
 	glm::vec2 velPlayer;

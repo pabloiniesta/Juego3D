@@ -19,6 +19,7 @@ void Player::init(ShaderProgram& shaderProgram)
 	//posicion inicial (hardcodeao por ahora)
 	posPlayer = INITIAL_POS;
 	sizePlayer = glm::vec2(1, 1);
+	rail = false;
 }
 
 void Player::update(int deltaTime)
@@ -31,7 +32,9 @@ void Player::update(int deltaTime)
 		if (Game::instance().getKey(32)) {
 			Game::instance().keyReleased(32);
 		}
-		velPlayer.y *= -1.f;
+		if(rail)velPlayer.x *= -1.f; //si esta rail se mueve horizontal
+		else velPlayer.y *= -1.f;
+		
 	}
 
 	posPlayer.x += velPlayer.x;
@@ -44,16 +47,17 @@ void Player::update(int deltaTime)
 		velPlayer.x = -velPlayer.x;
 	}
 
-	posPlayer.y += velPlayer.y;
-	if (map->collisionMoveUp(posPlayer)) {
-		posPlayer.y -= velPlayer.y;
-		velPlayer.y = -velPlayer.y;
+	if (!rail) { //si no esta en el rail se mueve vertical
+		posPlayer.y += velPlayer.y;
+		if (map->collisionMoveUp(posPlayer)) {
+			posPlayer.y -= velPlayer.y;
+			velPlayer.y = -velPlayer.y;
+		}
+		if (map->collisionMoveDown(posPlayer)) {
+			posPlayer.y -= velPlayer.y;
+			velPlayer.y = -velPlayer.y;
+		}
 	}
-	if (map->collisionMoveDown(posPlayer)) {
-		posPlayer.y -= velPlayer.y;
-		velPlayer.y = -velPlayer.y;
-	}
-	
 	
 }
 

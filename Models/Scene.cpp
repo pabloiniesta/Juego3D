@@ -94,6 +94,7 @@ void Scene::update(int deltaTime)
 
 	//mirar colision objetos y player
 	bool choque = false;
+	bool choquerail = false;
 	for (int i = 0; i < objects.size();i++) {
 		if (objects[i].hp > 0) {
 			pair<bool, pair<Direction, glm::ivec2>> colision = CheckCollisionPlayerMuro(*player, objects[i]);
@@ -153,12 +154,17 @@ void Scene::update(int deltaTime)
 						cambiarpinchos();
 					}
 				}
+				if (objects[i].tipoObject == 'r') { //rail. player se mueve en horizontal
+					player->rail = true; //si esta en el rail mov cambia
+					choquerail = true;
+				}
 			}
 			else {
 				if (objects[i].tipoObject == 'm') { // si no hay colision movemos el muro
 					if (player->posPlayer.y > objects[i].posObject.y) objects[i].posObject.y += 0.075f;
 					if (player->posPlayer.y < objects[i].posObject.y) objects[i].posObject.y -= 0.075f;
-					}
+				}
+				if(!choquerail)player->rail = false;
 			}
 		}
 	}

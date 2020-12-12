@@ -135,6 +135,10 @@ bool Map::loadLevel(const string& levelFile)
 				objectInfo.push_back(make_pair('i', make_pair(i, j)));
 				map[j * mapSize.x + i] = 0;
 			}
+			else if (tile == 'r') { //rail. 
+				objectInfo.push_back(make_pair('r', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
 			else {
 				map[j * mapSize.x + i] = tile - int('0');
 			}
