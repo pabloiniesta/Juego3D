@@ -62,10 +62,13 @@ void Scene::init(int lvl)
 	player->init(texProgram);
 	player->setMap(mapa);
 
+
+	keys = 0;
 	//cargar game objects
 	for (int i = 0; i < mapa->objectInfo.size(); i++) {
 		pair<char, pair<int, int> > info = mapa->objectInfo[i];
 		char tipoObject = info.first;
+		if (tipoObject == 'k') ++keys;
 		int posObjectx = info.second.first;
 		int posObjecty = info.second.second;
 		GameObject *object = new GameObject();
@@ -79,6 +82,7 @@ void Scene::init(int lvl)
 
 	stage = 1;
 	camaraXpos = 10; //camara inicial en x = 10
+	god = false;
 
 }
 
@@ -87,16 +91,74 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
 
+
 	//mirar colision objetos y player
 	bool choque = false;
 	for (int i = 0; i < objects.size();i++) {
 		if (objects[i].hp > 0) {
-			bool colision = CheckCollisionPlayerObject(*player, objects[i]);
-			if (colision) {
+			pair<bool, pair<Direction, glm::ivec2>> colision = CheckCollisionPlayerMuro(*player, objects[i]);
+			if (colision.first) {
 				if (objects[i].tipoObject == 's') { //si es la estrella
 					objects[i].colision();
 					Game::instance().nextLevel(0);
 				}
+				if (objects[i].tipoObject == 'p') { //es un pincho se muere el player. Reset pos y vel player y cam
+					if (!god) {
+						camaraXpos = 10;
+						player->reset();
+						stage = 1;
+					}
+				}
+				if (objects[i].tipoObject == 'm') { //muro
+					if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
+					else player->velPlayer.y *= -1; //colision vertical
+				}
+				if (objects[i].tipoObject == 'c') { //puerta
+					if (!choque) {
+						if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
+						else player->velPlayer.y *= -1; //colision vertical
+						choque = true;
+					}
+				}
+				if (objects[i].tipoObject == 'k') { //keys
+					objects[i].colision();
+					keys--;
+					encenderLuz();
+				}
+				if (objects[i].tipoObject == 'l') { //si chocas contra una luz no haces na
+					if (!choque) {
+						if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
+						else player->velPlayer.y *= -1; //colision vertical
+						choque = true;
+					}
+				}
+				if (objects[i].tipoObject == 'a') { //es un pincho se muere el player. Reset pos y vel player y cam
+					if (!god && objects[i].activo) {
+						camaraXpos = 10;
+						player->reset();
+						stage = 1;
+					}
+				}
+				if (objects[i].tipoObject == 'b') { //es un pincho se muere el player. Reset pos y vel player y cam
+					if (!god && objects[i].activo) {
+						camaraXpos = 10;
+						player->reset();
+						stage = 1;
+					}
+				}
+				if (objects[i].tipoObject == 'i') { //interruptor. activa/desactiva pinchos
+					if (!objects[i].activo) {
+						objects[i].activo = true;
+						objects[i].pulsarboton(texProgram); //cambiar model del boton a pulsado
+						cambiarpinchos();
+					}
+				}
+			}
+			else {
+				if (objects[i].tipoObject == 'm') { // si no hay colision movemos el muro
+					if (player->posPlayer.y > objects[i].posObject.y) objects[i].posObject.y += 0.075f;
+					if (player->posPlayer.y < objects[i].posObject.y) objects[i].posObject.y -= 0.075f;
+					}
 			}
 		}
 	}
@@ -125,7 +187,53 @@ void Scene::update(int deltaTime)
 		}
 	}
 
+	//abrir puerta si llaves obtenidas
+	if (keys == 0) {
+		for (int i = 0; i < objects.size();i++) {
+			if (objects[i].tipoObject == 'c') objects[i].colision(); //eliminamos puertas
+		}
+	}
+
+	//CHEATS
+	if (Game::instance().getKey(53)) { // 5 -> god mode
+		if (Game::instance().getKey(53)) {
+			Game::instance().keyReleased(53);
+		}
+		if (Game::instance().getKey(53)) {
+			Game::instance().keyReleased(53);
+		}
+		if (god) god = false;
+		else god = true;
+	}
+
 }
+
+//encender una luz cuando se pilla una key
+void Scene::encenderLuz() {
+	bool found = false;
+	for (int i = 0; i < objects.size() && !found;i++) {
+		if (objects[i].tipoObject == 'l' && !objects[i].encendido) {
+			objects[i].encender(texProgram);
+			objects[i].encendido = true;
+			found = true;
+		}
+	}
+}
+
+void Scene::cambiarpinchos()
+{
+	for (int i = 0; i < objects.size(); i++) {
+		if (objects[i].tipoObject == 'a') {
+			objects[i].activo = false;
+			objects[i].desactivarpincho(texProgram);
+		}
+		if (objects[i].tipoObject == 'b') {
+			objects[i].activo = true;
+			objects[i].activarpincho(texProgram);
+		}
+	}
+}
+
 
 void Scene::render()
 {
@@ -162,6 +270,10 @@ void Scene::render()
 	}
 	
 }
+
+
+
+
 
 void Scene::initShaders()
 {
@@ -204,6 +316,48 @@ bool Scene::CheckCollisionPlayerObject(Player& one, GameObject& two)
 	// Collision only if on both axes
 	return collisionX && collisionY;
 
+}
+
+pair<bool, pair<Direction, glm::ivec2>> Scene::CheckCollisionPlayerMuro(Player& one, GameObject& two)
+{
+	glm::vec2 center(one.posPlayer + 0.5f); //0.5 radio del player
+	// Calculate AABB info (center, half-extents)
+	glm::vec2 aabb_half_extents(two.sizeObject.x / 2, two.sizeObject.y / 2); 
+	glm::vec2 aabb_center(two.posObject.x + aabb_half_extents.x, two.posObject.y + aabb_half_extents.y);
+	// Get difference vector between both centers
+	glm::vec2 difference = center - aabb_center;
+	glm::vec2 clamped = glm::clamp(difference, -aabb_half_extents, aabb_half_extents);
+	// Now that we know the the clamped values, add this to AABB_center and we get the value of box closest to circle
+	glm::vec2 closest = aabb_center + clamped;
+	// Now retrieve vector between center circle and closest point AABB and check if length < radius
+	difference = closest - center;
+
+	if (glm::length(difference) < 0.5) // not <= since in that case a collision also occurs when object one exactly touches object two, which they are at the end of each collision resolution stage.
+		return make_pair(GL_TRUE, make_pair(VectorDirection(difference), difference));
+	else
+		return make_pair(GL_FALSE, make_pair(UP, glm::vec2(0, 0)));
+}
+
+Direction Scene::VectorDirection(glm::vec2 target)
+{
+	glm::vec2 compass[] = {
+		glm::vec2(0.0f, 1.0f),    // up
+		glm::vec2(1.0f, 0.0f),    // right
+		glm::vec2(0.0f, -1.0f),    // down
+		glm::vec2(-1.0f, 0.0f)    // left
+	};
+	GLfloat max = 0.0f;
+	GLuint best_match = -1;
+	for (GLuint i = 0; i < 4; i++)
+	{
+		GLfloat dot_product = glm::dot(glm::normalize(target), compass[i]);
+		if (dot_product > max)
+		{
+			max = dot_product;
+			best_match = i;
+		}
+	}
+	return (Direction)best_match;
 }
 
 

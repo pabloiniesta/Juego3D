@@ -33,7 +33,7 @@ void Map::render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shader
 	glm::mat4 modelMatrix;
 	glm::mat3 normalMatrix;
 	AssimpModel* modelCubo = new AssimpModel();
-	modelCubo->loadFromFile("models/cuboparedBordes.obj", shaderProgram);
+	modelCubo->loadFromFile("models/cubopared.obj", shaderProgram);
 	float scaleFactor = 1.f / modelCubo->getHeight();
 	glm::vec3 centerModelBase = modelCubo->getCenter() - glm::vec3(0.f, -modelCubo->getHeight() / 2.f, 0.f);
 	for (int i = 0; i < posCubos.size();++i) {
@@ -101,6 +101,38 @@ bool Map::loadLevel(const string& levelFile)
 				map[j * mapSize.x + i] = 0;
 			else if (tile == 's') { //s de star. Pa ganar el nivel
 				objectInfo.push_back(make_pair('s', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'p') { //p de pincho, te mata
+				objectInfo.push_back(make_pair('p', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'm') { //m de muro. te bloquea
+				objectInfo.push_back(make_pair('m', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'c') { //c de carcel. puerta que se abre al pillar llaves
+				objectInfo.push_back(make_pair('c', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'k') { //k de key. llaves para abrir puertas
+				objectInfo.push_back(make_pair('k', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'l') { //l de luz. se enciende al pillar una llave
+				objectInfo.push_back(make_pair('l', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'a') { //Pincho tipo A. se activa/desactiva
+				objectInfo.push_back(make_pair('a', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'b') { //pincho tipo B. se activa/desactiva
+				objectInfo.push_back(make_pair('b', make_pair(i, j)));
+				map[j * mapSize.x + i] = 0;
+			}
+			else if (tile == 'i') { //interruptor. activa o desactiva pinchos
+				objectInfo.push_back(make_pair('i', make_pair(i, j)));
 				map[j * mapSize.x + i] = 0;
 			}
 			else {
