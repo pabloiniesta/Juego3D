@@ -108,9 +108,11 @@ void Scene::update(int deltaTime)
 						camaraXpos = 10;
 						player->reset();
 						stage = 1;
+						Game::instance().playSound("sounds/pinchos.mp3", false);
 					}
 				}
 				if (objects[i].tipoObject == 'm') { //muro
+					Game::instance().playSound("sounds/wall.mp3", false);
 					if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
 					else player->velPlayer.y *= -1; //colision vertical
 				}
@@ -122,12 +124,14 @@ void Scene::update(int deltaTime)
 					}
 				}
 				if (objects[i].tipoObject == 'k') { //keys
+					Game::instance().playSound("sounds/key.mp3", false);
 					objects[i].colision();
 					keys--;
 					encenderLuz();
 				}
 				if (objects[i].tipoObject == 'l') { //si chocas contra una luz no haces na
 					if (!choque) {
+						Game::instance().playSound("sounds/block.mp3", false);
 						if (colision.second.first == LEFT || colision.second.first == RIGHT) player->velPlayer.x *= -1; //colision horizontal 
 						else player->velPlayer.y *= -1; //colision vertical
 						choque = true;
@@ -138,6 +142,7 @@ void Scene::update(int deltaTime)
 						camaraXpos = 10;
 						player->reset();
 						stage = 1;
+						Game::instance().playSound("sounds/pinchos.mp3", false);
 					}
 				}
 				if (objects[i].tipoObject == 'b') { //es un pincho se muere el player. Reset pos y vel player y cam
@@ -145,12 +150,14 @@ void Scene::update(int deltaTime)
 						camaraXpos = 10;
 						player->reset();
 						stage = 1;
+						Game::instance().playSound("sounds/pinchos.mp3", false);
 					}
 				}
 				if (objects[i].tipoObject == 'i') { //interruptor. activa/desactiva pinchos
 					if (!objects[i].activo) {
 						objects[i].activo = true;
 						objects[i].pulsarboton(texProgram); //cambiar model del boton a pulsado
+						Game::instance().playSound("sounds/boton.mp3", false);
 						cambiarpinchos();
 					}
 				}
@@ -196,7 +203,10 @@ void Scene::update(int deltaTime)
 	//abrir puerta si llaves obtenidas
 	if (keys == 0) {
 		for (int i = 0; i < objects.size();i++) {
-			if (objects[i].tipoObject == 'c') objects[i].colision(); //eliminamos puertas
+			if (objects[i].tipoObject == 'c') {
+				objects[i].colision(); //eliminamos puertas
+				Game::instance().playSound("sounds/puerta.mp3", false);
+			}
 		}
 	}
 

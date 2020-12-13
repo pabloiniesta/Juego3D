@@ -74,15 +74,21 @@ void Game::nextLevel(int lvl) {
 			scene.init(1);
 		}
 		else if (levelAct == 2) {
+			playSound("sounds/next_level.mp3", false);
 			scene.init(2);
 		}
 		else if (levelAct == 3) {
+			playSound("sounds/next_level.mp3", false);
 			scene.init(3);
 		}
 		else if (levelAct == 4) {
+			playSound("sounds/next_level.mp3", false);
 			scene.init(4);
 		}
 		else if (levelAct == 5) {
+			stopSounds();
+			playSound("sounds/next_level.mp3", false);
+			playSound("bg_lvl5.mp3", false);
 			scene.init(5);
 		}
 		else if (levelAct == 6) {

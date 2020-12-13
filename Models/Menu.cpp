@@ -38,37 +38,32 @@ void Menu::update(int deltaTime) {
 
 
 	if (Game::instance().getKey(13) && !bEnterPressed) { //enter key
-		//Game::instance().playSound("sounds/menu_sel.wav", false);
+		Game::instance().playSound("sounds/switch_menu.mp3", false);
 		bEnterPressed = true;
-		OutputDebugStringW(L"LEVEL1");
-		if (bInstructions) //If at Instructions screen
+		if (bInstructions) { //If at Instructions screen
 			bInstructions = false; //Exit instructions screen
-		else if (bCredits) //If at Credits screen
+		}
+		else if (bCredits){ //If at Credits screen
 			bCredits = false; //Exit instructions screen
-		else if (bGameOver) { //If at Lose screen
-			bGameOver = false; //Exit instructions screen
-			//Game::instance().stopSounds();
-			//Game::instance().playSound("sounds/menu.mp3", true);
+			Game::instance().playSound("sounds/switch_menu.mp3", false);
 		}
 		else if (bWin) { //If at Win screen
 			bWin = false; //Exit instructions screen
-			//Game::instance().stopSounds();
-			//Game::instance().playSound("sounds/menu.mp3", true);
+			Game::instance().playSound("sounds/menu.mp3", true);
 		}
 
 	}
 	else { //Main menu screen
-		if (Game::instance().getKey(49)) { //Input 1 - Start
-			//Game::instance().playSound("sounds/menu_sel.wav", false);
+		if (Game::instance().getKey(49) && !bInstructions && !bCredits) { //Input 1 - Start
 			Game::instance().nextLevel(0);
 		}
-		else if (Game::instance().getKey(50)) { //Input 2 - Instructions
-			//Game::instance().playSound("sounds/menu_sel.wav", false);
+		else if (Game::instance().getKey(50) && !bInstructions && !bCredits) { //Input 2 - Instructions
+			Game::instance().playSound("sounds/switch_menu.mp3", false);
 			bInstructions = true;
 			bEnterPressed = false;
 		}
-		else if (Game::instance().getKey(51)) { //Input 3 - Credits
-			//Game::instance().playSound("sounds/menu_sel.wav", false);
+		else if (Game::instance().getKey(51) && !bInstructions && !bCredits) { //Input 3 - Credits
+			Game::instance().playSound("sounds/switch_menu.mp3", false);
 			bCredits = true;
 			bEnterPressed = false;
 		}
@@ -104,8 +99,8 @@ void Menu::render() {
 }
 
 void Menu::activateWin() {
-	//Game::instance().stopSounds();
-	//Game::instance().playSound("sounds/win.wav", false);
+	Game::instance().stopSounds();
+	Game::instance().playSound("sounds/win.mp3", false);
 	bWin = true;
 	bEnterPressed = false;
 }
