@@ -1,23 +1,23 @@
 TILEMAP
-20 20							-- Size of tile map in tiles Mapsize.x Mapsize.y
+60 20							-- Size of tile map in tiles Mapsize.x Mapsize.y
 16 							-- Tile size. Tamaño modelo es 16x16x16
-11111111111111111111
-1                  1
-1                  1
-1                  1
-1   1 1 1 1 1  s   1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-11111111111111111111
+11111111111111111111                    11111111111111111111
+1p                 pppppppppppppppppppppp                 p1
+1p                                                        p1
+1               rrrrrrrrrrrrrrrrrrrrrrrrrrrr               1
+1                  pppppppppppppppppppppp                  1
+1         1111111111                    111111111111       1
+1                 p1                    1                  1
+1                 p1                    1                  1
+1p                 1                    1                 p1
+1p                 1                    1                 p1
+1111111111         1                    1       111111111111
+1                  1                    1                 p1
+1  s              p1                    1                 p1
+1                 p1                    1                  1
+11111111111111111111                    111111111          1
+1                  pppppppppppppppppppppp                  1
+1                                                          1
+1               rrrrrrrrrrrrrrrrrrrrrrrrrrrr              p1
+1                  pppppppppppppppppppppp                 p1
+11111111111111111111                    11111111111111111111
