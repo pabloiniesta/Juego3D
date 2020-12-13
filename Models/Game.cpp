@@ -1,15 +1,15 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
-//#include <irrKlang.h>
+#include <irrKlang.h>
 
 using namespace std;
-//using namespace irrklang;
+using namespace irrklang;
 
 
-//ISoundEngine* SoundEngine = createIrrKlangDevice();
+ISoundEngine* SoundEngine = createIrrKlangDevice();
 
-/*
+
 void Game::playSound(const char* path, bool loop) {
 	SoundEngine->play2D(path, loop);
 }
@@ -17,7 +17,7 @@ void Game::playSound(const char* path, bool loop) {
 void Game::stopSounds() {
 	SoundEngine->stopAllSounds();
 }
-*/
+
 
 void Game::init()
 {
@@ -30,6 +30,7 @@ void Game::init()
 
 void Game::setMenuState() {
 	levelAct = 0;
+	playSound("sounds/menu.mp3", true);
 }
 
 
@@ -68,9 +69,8 @@ void Game::nextLevel(int lvl) {
 	if (lvl == 0) {
 		++levelAct; //Go to next level
 		if (levelAct == 1) {//Num of total levels+1
-			//SoundEngine->stopAllSounds();
-			//SoundEngine->play2D("sounds/background.mp3", true);
-			OutputDebugStringW(L"LEVEL1");
+			SoundEngine->stopAllSounds();
+			SoundEngine->play2D("sounds/background.mp3", true);
 			scene.init(1);
 		}
 		else if (levelAct == 2) {

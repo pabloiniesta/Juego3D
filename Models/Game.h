@@ -23,6 +23,10 @@ public:
 		return G;
 	}
 	
+	void playSound(const char* path, bool loop);
+
+	void stopSounds();
+
 	void init();
 	bool update(int deltaTime);
 	void render();
