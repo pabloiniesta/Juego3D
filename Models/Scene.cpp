@@ -83,7 +83,7 @@ void Scene::init(int lvl)
 	stage = 1;
 	camaraXpos = 10; //camara inicial en x = 10
 	god = false;
-
+	rail = false;
 }
 
 void Scene::update(int deltaTime)
@@ -164,6 +164,10 @@ void Scene::update(int deltaTime)
 				if (objects[i].tipoObject == 'r') { //rail. player se mueve en horizontal
 					player->rail = true; //si esta en el rail mov cambia
 					choquerail = true;
+					if (!rail) {
+						Game::instance().playSound("sounds/rail2.mp3", false);
+						rail = true;
+					}
 				}
 			}
 			else {
@@ -171,11 +175,15 @@ void Scene::update(int deltaTime)
 					if (player->posPlayer.y > objects[i].posObject.y) objects[i].posObject.y += 0.075f;
 					if (player->posPlayer.y < objects[i].posObject.y) objects[i].posObject.y -= 0.075f;
 				}
-				if(!choquerail)player->rail = false;
+				if (!choquerail) {
+					player->rail = false;
+				}
 			}
 		}
 	}
-
+	if (!choquerail) {
+		rail = false;
+	}
 	//control de camara dependiendo del stage y el player
 	if (stage == 1) {
 		if (player->posPlayer.x > 20 && player->velPlayer.x > 0) { //se va pa la derecha
@@ -206,6 +214,7 @@ void Scene::update(int deltaTime)
 			if (objects[i].tipoObject == 'c') {
 				objects[i].colision(); //eliminamos puertas
 				Game::instance().playSound("sounds/puerta.mp3", false);
+				keys = keys - 1;
 			}
 		}
 	}

@@ -8,6 +8,9 @@
 class Player {
 
 public:
+	void playSound(const char* path, bool loop);
+
+	void stopSounds();
 
 	void init(ShaderProgram& shaderProgram);
 	void update(int deltaTime);

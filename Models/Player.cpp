@@ -3,10 +3,25 @@
 #define GLM_FORCE_RADIANS
 #include <GL/glut.h>
 #include "Game.h"
-
+#include <irrKlang.h>
+using namespace irrklang;
 
 const glm::vec2 INITIAL_POS(2.f, 2.f);
 const glm::vec2 INITIAL_VELOCITY(0.1f, 0.1f);
+
+
+
+
+ISoundEngine* SoundEngine1 = createIrrKlangDevice();
+
+
+void Player::playSound(const char* path, bool loop) {
+	SoundEngine1->play2D(path, loop);
+}
+
+void Player::stopSounds() {
+	SoundEngine1->stopAllSounds();
+}
 
 void Player::init(ShaderProgram& shaderProgram)
 {
@@ -34,17 +49,18 @@ void Player::update(int deltaTime)
 		}
 		if(rail)velPlayer.x *= -1.f; //si esta rail se mueve horizontal
 		else velPlayer.y *= -1.f;
-		
 	}
 
 	posPlayer.x += velPlayer.x;
 	if (map->collisionMoveRight(posPlayer)) {
 		posPlayer.x -= velPlayer.x;
 		velPlayer.x = -velPlayer.x;
+		playSound("sounds/pared.mp3", false);
 	}
 	if (map->collisionMoveLeft(posPlayer)) {
 		posPlayer.x -= velPlayer.x;
 		velPlayer.x = -velPlayer.x;
+		playSound("sounds/pared.mp3", false);
 	}
 
 	if (!rail) { //si no esta en el rail se mueve vertical
@@ -52,10 +68,12 @@ void Player::update(int deltaTime)
 		if (map->collisionMoveUp(posPlayer)) {
 			posPlayer.y -= velPlayer.y;
 			velPlayer.y = -velPlayer.y;
+			playSound("sounds/pared.mp3", false);
 		}
 		if (map->collisionMoveDown(posPlayer)) {
 			posPlayer.y -= velPlayer.y;
 			velPlayer.y = -velPlayer.y;
+			playSound("sounds/pared.mp3", false);
 		}
 	}
 	

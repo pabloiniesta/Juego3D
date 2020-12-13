@@ -57,6 +57,7 @@ private:
 	int stage;
 	float camaraXpos;
 	bool god;
+	bool rail;
 
 	ShaderProgram texProgram;
 	float currentTime;

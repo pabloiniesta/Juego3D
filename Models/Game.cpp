@@ -88,7 +88,7 @@ void Game::nextLevel(int lvl) {
 		else if (levelAct == 5) {
 			stopSounds();
 			playSound("sounds/next_level.mp3", false);
-			playSound("bg_lvl5.mp3", false);
+			playSound("sounds/bg_lvl5.mp3", false);
 			scene.init(5);
 		}
 		else if (levelAct == 6) {
