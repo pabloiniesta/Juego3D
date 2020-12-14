@@ -7,7 +7,7 @@
 #include <GL/glut.h>
 #include <vector>
 
-//testeando github
+//testeando github el pepe
 #define PI 3.14159f
 
 Scene::Scene()
