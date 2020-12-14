@@ -21,7 +21,7 @@ Map::Map(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& pro
 	loadLevel(levelFile);
 	prepareArrays(minCoords, program);
 	modelCubo = new AssimpModel();
-	modelCubo->loadFromFile("models/cubopared.obj", program);
+	modelCubo->loadFromFile("models/tronco.obj", program);
 }
 
 Map::~Map()
