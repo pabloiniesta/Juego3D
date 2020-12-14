@@ -35,23 +35,23 @@ void Scene::init(int lvl)
 	//cargar mapa
 	if(lvl == 1){
 		OutputDebugStringW(L"LVL1");
-		mapa = Map::createMap("levels/level01.txt", glm::vec2(32, 16), texProgram);
+		mapa = Map::createMap("levels/level01.txt", glm::vec2(32, 16), texProgram, lvl);
 	}
 	else if (lvl == 2) {
 		OutputDebugStringW(L"LVL1");
-		mapa = Map::createMap("levels/level02.txt", glm::vec2(32, 16), texProgram);
+		mapa = Map::createMap("levels/level02.txt", glm::vec2(32, 16), texProgram, lvl);
 	}
 	else if (lvl == 3) {
 		//mapa 3
-		mapa = Map::createMap("levels/level03.txt", glm::vec2(32, 16), texProgram);
+		mapa = Map::createMap("levels/level03.txt", glm::vec2(32, 16), texProgram, lvl);
 	}
 	else if (lvl == 4) {
 		//mapa 4
-		mapa = Map::createMap("levels/level04.txt", glm::vec2(32, 16), texProgram);
+		mapa = Map::createMap("levels/level04.txt", glm::vec2(32, 16), texProgram, lvl);
 	}
 	else if (lvl == 5) {
 		//mapa 5
-		mapa = Map::createMap("levels/level05.txt", glm::vec2(32, 16), texProgram);
+		mapa = Map::createMap("levels/level05.txt", glm::vec2(32, 16), texProgram, lvl);
 	}
 
 	//cargar nivel
@@ -72,7 +72,7 @@ void Scene::init(int lvl)
 		int posObjectx = info.second.first;
 		int posObjecty = info.second.second;
 		GameObject *object = new GameObject();
-		object->init(texProgram, tipoObject, posObjectx, posObjecty);
+		object->init(texProgram, tipoObject, posObjectx, posObjecty, lvl);
 		objects.push_back(*object);
 	}
 
@@ -81,7 +81,6 @@ void Scene::init(int lvl)
 	currentTime = 0.0f;
 
 	stage = 1;
-	nivel = lvl;
 	camaraXpos = 10; //camara inicial en x = 10
 	god = false;
 	rail = false;

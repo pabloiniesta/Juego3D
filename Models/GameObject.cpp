@@ -3,7 +3,7 @@
 #define GLM_FORCE_RADIANS
 #include <GL/glut.h>
 
-void GameObject::init(ShaderProgram& shaderProgram, char tipo, int posx, int posy)
+void GameObject::init(ShaderProgram& shaderProgram, char tipo, int posx, int posy, int lvl)
 {	
 	encendido = false; //solo para las luces de las keys
 	activo = false;

@@ -10,18 +10,19 @@
 #define GLM_FORCE_RADIANS
 using namespace std;
 
-Map* Map::createMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program)
+Map* Map::createMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program, int lvl)
 {
-	Map* map = new Map(levelFile, minCoords, program);
+	Map* map = new Map(levelFile, minCoords, program, lvl);
 	return map;
 }
 
-Map::Map(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& program)
+Map::Map(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& program, int lvl)
 {	
 	loadLevel(levelFile);
 	prepareArrays(minCoords, program);
 	modelCubo = new AssimpModel();
-	modelCubo->loadFromFile("models/tronco.obj", program);
+	string s = "models/pared" + std::to_string(lvl) + ".obj";
+	modelCubo->loadFromFile(s, program);
 }
 
 Map::~Map()

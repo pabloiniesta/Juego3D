@@ -13,9 +13,9 @@ class Map
 
 public:
 	// Tile maps can only be created inside an OpenGL context
-	static Map* createMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
+	static Map* createMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program, int lvl);
 
-	Map(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
+	Map(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program, int lvl);
 	~Map();
 
 	void render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram) const;

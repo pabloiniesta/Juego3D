@@ -8,7 +8,7 @@ class GameObject
 {
 public:
 
-	void init(ShaderProgram& shaderProgram, char tipo, int x, int y);
+	void init(ShaderProgram& shaderProgram, char tipo, int x, int y, int lvl);
 	void render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shaderProgram);
 	void colision();
 	void encender(ShaderProgram& shaderProgram);
