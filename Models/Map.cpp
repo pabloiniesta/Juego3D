@@ -20,6 +20,8 @@ Map::Map(const string &levelFile, const glm::vec2& minCoords, ShaderProgram& pro
 {	
 	loadLevel(levelFile);
 	prepareArrays(minCoords, program);
+	modelCubo = new AssimpModel();
+	modelCubo->loadFromFile("models/cubopared.obj", program);
 }
 
 Map::~Map()
@@ -32,8 +34,6 @@ void Map::render(float currentTime, glm::mat4& viewMatrix, ShaderProgram& shader
 {
 	glm::mat4 modelMatrix;
 	glm::mat3 normalMatrix;
-	AssimpModel* modelCubo = new AssimpModel();
-	modelCubo->loadFromFile("models/cubopared.obj", shaderProgram);
 	float scaleFactor = 1.f / modelCubo->getHeight();
 	glm::vec3 centerModelBase = modelCubo->getCenter() - glm::vec3(0.f, -modelCubo->getHeight() / 2.f, 0.f);
 	for (int i = 0; i < posCubos.size();++i) {

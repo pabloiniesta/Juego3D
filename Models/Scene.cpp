@@ -81,6 +81,7 @@ void Scene::init(int lvl)
 	currentTime = 0.0f;
 
 	stage = 1;
+	level = lvl;
 	camaraXpos = 10; //camara inicial en x = 10
 	god = false;
 	rail = false;

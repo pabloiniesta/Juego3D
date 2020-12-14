@@ -30,7 +30,7 @@ public:
 
 	vector< pair<char, pair<int, int> > > objectInfo; //vector con los datos de un object. Char dice el tipo y luego va la pos
 
-	
+	AssimpModel* modelCubo;
 
 private:
 	bool loadLevel(const string& levelFile);

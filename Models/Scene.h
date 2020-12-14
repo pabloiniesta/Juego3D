@@ -55,6 +55,7 @@ private:
 
 	int keys;
 	int stage;
+	int nivel;
 	float camaraXpos;
 	bool god;
 	bool rail;
