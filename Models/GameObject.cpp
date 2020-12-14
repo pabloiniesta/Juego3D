@@ -9,7 +9,8 @@ void GameObject::init(ShaderProgram& shaderProgram, char tipo, int posx, int pos
 	activo = false;
 	if (tipo == 's') { //Star, 1hp.
 		modelObject = new AssimpModel();
-		modelObject->loadFromFile("models/star2.obj", shaderProgram);
+		string s = "models/final" + std::to_string(lvl) + ".obj";
+		modelObject->loadFromFile(s, shaderProgram);
 		hp = 1;
 		sizeObject = glm::vec2(1, 1);
 		tipoObject = 's';
